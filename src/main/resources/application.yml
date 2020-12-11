@@ -1,0 +1,62 @@
+spring:
+  application: 
+    name: bookStore
+  jackson: 
+    property-naming-strategy : SNAKE_CASE
+    serialization:
+      fail-on-empty-beans: false
+  activemq: 
+    broker-url: ${AMQ_BROKER_URL}
+    user: ${AMQ_USER_NAME}
+    password: ${AMQ_PWD}
+    in-memory: false
+  jms:
+    pub-sub-domain: true
+  datasource:
+    url: ${MYSQL_JDBC_URL} 
+    username: ${MYSQL_USER}
+    password: ${MYSQL_PWD}
+  jpa: 
+    show-sql: true
+  mail:
+    host: ${SMTP_HOST}
+    username: ${SMTP_USER}
+    password: ${SMTP_PWD}
+    port: ${SMTP_PORT}
+    properties:  
+      mail: 
+        smtp: 
+          connectiontimeout: 5000
+          timeout: 5000
+          writetimeout: 5000 
+          auth: true
+          starttls: 
+            enable: true  
+jwt:
+  secret: ${JWT_SECRET}
+  expiry: ${JWT_KEY_TTL} #Expiry calculate in days 
+  client-id: ${CLIENT_ID}
+  
+server:
+    port: ${API_PORT}
+logging:
+  level: 
+    com.dlib.bibliothek: DEBUG    
+app:
+  mail-from: noreply@abc.com
+  feed-book-interval:  ${FEED_BOOK_INTERVAL} #Get feed recent books fetching interval
+  items-per-page: ${ITEMS_PER_PAGE:10}
+  book-return-days: ${BOOK_RETURN_DAYS:10} #Time period to return the book
+  book-taken-limit: ${BOOK_TAKEN_LIMIT:2} #Number of books a user can take 
+  return-limit: ${RETURN_LIMIT:3} #Limit for show the field isRenewable  
+  cover-image-path: ${COVER_IMAGE_PATH:D:/MyApps/coverImages/cover/}
+  default-cover-url: https://picsum.photos/500/500/?image=599
+  default-cover-thumb-url: https://picsum.photos/500/500/?image=599
+  cover-thumb-image-path: ${COVER_THUMB_IMAGE_PATH:D:/MyApps/coverImages/coverThumb/}
+  qr-code-image-path: ${QR_CODE_IMAGE_PATH:D:/MyApps/QrCode/}
+  qr-code-pdf-path: ${QR_CODE_PDF_PATH:D:/MyApps/QrCode/QrCodes.pdf}
+  privacy-policy-path: /home/app/library-app/privacy_policy_bibliothek.html
+  api-host: ${API_HOST} #For swagger API
+  firebase-server-key: ${FIREBASE_SERVER_KEY}
+  firebase-api-url: https://fcm.googleapis.com/fcm/send
+  
