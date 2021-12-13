@@ -15,10 +15,10 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 
 import com.book.store.bean.LanguageForm;
+import com.book.store.dto.ApiResponse;
+import com.book.store.dto.Data;
+import com.book.store.dto.LanguageResponse;
 import com.book.store.exception.ValidationException;
-import com.book.store.response.ApiResponse;
-import com.book.store.response.Data;
-import com.book.store.response.LanguageResponse;
 import com.book.store.service.LanguageService;
 import com.book.store.util.ApiConstants;
 

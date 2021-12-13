@@ -1,8 +1,6 @@
 
 package com.book.store.bean;
 
-import javax.validation.constraints.NotBlank;
-
 import com.fasterxml.jackson.annotation.JsonAlias;
 
 import lombok.Getter;
@@ -14,13 +12,11 @@ import lombok.ToString;
 @ToString
 public class LoginForm {
 
-	@NotBlank
 	@JsonAlias("email")
 	private String username;
 
-	@NotBlank
 	private String password;
-	
+
 	private String fcmId;
 
 }

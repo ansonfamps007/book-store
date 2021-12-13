@@ -2,8 +2,8 @@ package com.book.store.service;
 
 import java.util.List;
 
+import com.book.store.dto.BookResponse;
 import com.book.store.model.Watch;
-import com.book.store.response.BookResponse;
 
 public interface WatchlistService {
 

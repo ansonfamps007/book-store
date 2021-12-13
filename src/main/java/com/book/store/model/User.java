@@ -16,7 +16,6 @@ import javax.persistence.JoinTable;
 import javax.persistence.OneToMany;
 import javax.persistence.Table;
 import javax.persistence.UniqueConstraint;
-import javax.validation.constraints.NotBlank;
 
 import org.hibernate.annotations.CreationTimestamp;
 import org.hibernate.annotations.UpdateTimestamp;
@@ -39,13 +38,10 @@ public class User {
 	private Integer id;
 
 	// Email id as username
-	@NotBlank
 	private String username;
 
-	@NotBlank
 	private String name;
 
-	@NotBlank
 	private String password;
 
 	private String role;

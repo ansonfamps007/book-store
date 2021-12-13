@@ -1,7 +1,7 @@
 
 package com.book.store.bean;
 
-import javax.validation.constraints.NotBlank;
+import javax.validation.constraints.NotEmpty;
 
 import lombok.Getter;
 import lombok.Setter;
@@ -12,9 +12,9 @@ import lombok.ToString;
 @ToString
 public class AuthorForm {
 
-	@NotBlank(message = "Author name should not be blank")
+	@NotEmpty
 	private String name;
-	
+
 	private int id;
 
 }

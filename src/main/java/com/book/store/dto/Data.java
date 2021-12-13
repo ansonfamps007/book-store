@@ -1,5 +1,5 @@
 
-package com.book.store.response;
+package com.book.store.dto;
 
 import java.util.List;
 

@@ -10,10 +10,10 @@ import org.springframework.stereotype.Service;
 import org.springframework.util.ObjectUtils;
 
 import com.book.store.bean.CategoryForm;
+import com.book.store.dto.CategoryResponse;
 import com.book.store.exception.ValidationException;
 import com.book.store.model.Category;
 import com.book.store.repository.CategoryRepository;
-import com.book.store.response.CategoryResponse;
 import com.book.store.service.CategoryService;
 
 import lombok.extern.slf4j.Slf4j;

@@ -7,24 +7,23 @@ import javax.validation.Valid;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.MediaType;
-import org.springframework.util.ObjectUtils;
+import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.DeleteMapping;
 import org.springframework.web.bind.annotation.GetMapping;
+import org.springframework.web.bind.annotation.PatchMapping;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
-import org.springframework.web.bind.annotation.PutMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 
 import com.book.store.bean.AuthorForm;
-import com.book.store.exception.ValidationException;
-import com.book.store.response.ApiResponse;
-import com.book.store.response.AuthorResponse;
-import com.book.store.response.Data;
+import com.book.store.dto.AuthorDto;
 import com.book.store.service.AuthorService;
-import com.book.store.util.ApiConstants;
 
+import io.swagger.v3.oas.annotations.Operation;
+import io.swagger.v3.oas.annotations.responses.ApiResponse;
+import io.swagger.v3.oas.annotations.responses.ApiResponses;
 import lombok.extern.slf4j.Slf4j;
 
 @RestController
@@ -37,61 +36,55 @@ public class AuthorController {
 
 	@PostMapping(value = "/add", produces = { MediaType.APPLICATION_JSON_VALUE }, consumes = {
 			MediaType.APPLICATION_JSON_VALUE })
-	public ApiResponse addAuthor(@Valid @RequestBody AuthorForm authorForm) {
+	@Operation(summary = "Inserting Author")
+	@ApiResponses(value = { @ApiResponse(responseCode = "200", description = "Success"),
+			@ApiResponse(responseCode = "400", description = "Invalid Data"),
+			@ApiResponse(responseCode = "406", description = "Validation exception") })
+	public ResponseEntity<String> addAuthor(@Valid @RequestBody AuthorForm authorForm) {
 		log.debug("AuthorController : addAuthor {} ");
-		if (!authorService.existByAuthorName(authorForm.getName())) {
-			authorService.addAuthor(authorForm.getName());
-			return ApiResponse.builder().error(false).message("Author Inserted").build();
-		} else {
-			throw new ValidationException("Author name already exist !");
-		}
+		authorService.addAuthor(authorForm.getName());
+		return ResponseEntity.ok("Successfully Inserted !");
 	}
 
-	@GetMapping(value = "/get_authors", produces = { MediaType.APPLICATION_JSON_VALUE })
-	public ApiResponse getAuthors() {
-		log.info("AuthorController - getAuthors {} ");
-		Data authorData = new Data();
-		List<AuthorResponse> authorList = authorService.fetchAllAuthors();
-		if (!ObjectUtils.isEmpty(authorList)) {
-			authorData.setAuthors(authorList);
-			log.debug("authorList : ", authorList);
-			return ApiResponse.builder().error(false).data(authorData).message("OK").build();
-		} else {
-			log.debug(ApiConstants.NO_DATA);
-			throw new ValidationException(ApiConstants.NO_DATA);
-		}
+	@GetMapping(value = "/getAll", produces = { MediaType.APPLICATION_JSON_VALUE })
+	@Operation(summary = "Fetch All Authors")
+	@ApiResponses(value = { @ApiResponse(responseCode = "200", description = "Success"),
+			@ApiResponse(responseCode = "400", description = "Invalid Data"), })
+	public ResponseEntity<List<AuthorDto>> getAllAuthors() {
+		log.info("AuthorController - getAllAuthors {} ");
+		return ResponseEntity.ok(authorService.getAllAuthors());
 	}
 
-	@GetMapping(value = "/get_authors/{name}", produces = { MediaType.APPLICATION_JSON_VALUE })
-	public ApiResponse getAuthorByName(@PathVariable String name) {
-		log.info("AuthorController - getAuthors {} ", name);
-		Data authorData = new Data();
-		return authorService.fetchAuthorByName(name).map(author -> {
-			authorData.setAuthors(author);
-			return ApiResponse.builder().error(false).data(authorData).message("OK").build();
-		}).orElseThrow(() -> new ValidationException(ApiConstants.NO_DATA));
+	@GetMapping(value = "/get/{name}", produces = { MediaType.APPLICATION_JSON_VALUE })
+	@Operation(summary = "Fetch Author By Name")
+	@ApiResponses(value = { @ApiResponse(responseCode = "200", description = "Success"),
+			@ApiResponse(responseCode = "400", description = "Invalid Data"), })
+	public ResponseEntity<AuthorDto> getAuthorByName(@PathVariable String name) {
+		log.info("AuthorController - getAuthorByName {} ", name);
+		return ResponseEntity.ok(authorService.getAuthorByName(name));
 	}
 
-	@PutMapping(value = "/update", produces = { MediaType.APPLICATION_JSON_VALUE }, consumes = {
+	@PatchMapping(value = "/update", produces = { MediaType.APPLICATION_JSON_VALUE }, consumes = {
 			MediaType.APPLICATION_JSON_VALUE })
-	public ApiResponse updateAuthor(@Valid @RequestBody AuthorForm authorForm) {
+	@Operation(summary = "Updating Author")
+	@ApiResponses(value = { @ApiResponse(responseCode = "200", description = "Success"),
+			@ApiResponse(responseCode = "400", description = "Invalid Data"),
+			@ApiResponse(responseCode = "406", description = "Validation exception") })
+	public ResponseEntity<String> updateAuthor(@Valid @RequestBody AuthorForm authorForm) {
 		log.debug("AuthorController : updateAuthor {} ");
-		if (authorService.existByAuthorId(authorForm.getId())) {
-			authorService.updateAuthor(authorForm);
-			return ApiResponse.builder().error(false).message("Author Updated").build();
-		} else {
-			throw new ValidationException(ApiConstants.NO_DATA);
-		}
+		authorService.updateAuthor(authorForm);
+		return ResponseEntity.ok("Successfully Updated !");
 	}
 
 	@DeleteMapping(value = "/delete/{id}", produces = { MediaType.APPLICATION_JSON_VALUE })
-	public ApiResponse deleteAuthor(@PathVariable int id) {
+	@Operation(summary = "Deleting Author")
+	@ApiResponses(value = { @ApiResponse(responseCode = "200", description = "Success"),
+			@ApiResponse(responseCode = "400", description = "Invalid Data"),
+			@ApiResponse(responseCode = "406", description = "Validation exception") })
+	public ResponseEntity<String> deleteAuthor(@PathVariable int id) {
 		log.debug("AuthorController : deleteAuthor {} ");
-		if (authorService.existByAuthorId(id)) {
-			authorService.deleteAuthor(id);
-			return ApiResponse.builder().error(false).message("Author Deleted").build();
-		} else {
-			throw new ValidationException(ApiConstants.NO_DATA);
-		}
+		authorService.deleteAuthor(id);
+		return ResponseEntity.ok("Successfully Deleted !");
 	}
+
 }

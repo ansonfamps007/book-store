@@ -5,46 +5,25 @@ spring:
     property-naming-strategy : SNAKE_CASE
     serialization:
       fail-on-empty-beans: false
-  activemq: 
-    broker-url: ${AMQ_BROKER_URL}
-    user: ${AMQ_USER_NAME}
-    password: ${AMQ_PWD}
-    in-memory: false
-  jms:
-    pub-sub-domain: true
   datasource:
-    url: ${MYSQL_JDBC_URL} 
-    username: ${MYSQL_USER}
-    password: ${MYSQL_PWD}
+    url: ${MYSQL_JDBC_URL:jdbc:mysql://127.0.0.1:3306/bookstore} 
+    username: ${MYSQL_USER:root}
+    password: ${MYSQL_PWD:root}
   jpa: 
     show-sql: true
-  mail:
-    host: ${SMTP_HOST}
-    username: ${SMTP_USER}
-    password: ${SMTP_PWD}
-    port: ${SMTP_PORT}
-    properties:  
-      mail: 
-        smtp: 
-          connectiontimeout: 5000
-          timeout: 5000
-          writetimeout: 5000 
-          auth: true
-          starttls: 
-            enable: true  
 jwt:
-  secret: ${JWT_SECRET}
-  expiry: ${JWT_KEY_TTL} #Expiry calculate in days 
-  client-id: ${CLIENT_ID}
+  secret: xq0m8NGSQDTibX7uSvRgbK9b1Vd0a1q5
+  expiry: ${JWT_KEY_TTL:365} #Expiry calculate in days 
+  client-id: ${CLIENT_ID:ada072ad-5e02-4829-84e4-b528a6ec3372}
   
 server:
-    port: ${API_PORT}
+    port: 8081
 logging:
   level: 
     com.dlib.bibliothek: DEBUG    
 app:
-  mail-from: noreply@abc.com
-  feed-book-interval:  ${FEED_BOOK_INTERVAL} #Get feed recent books fetching interval
+  mail-from: noreply@thinkpalm.com
+  feed-book-interval:  ${FEED_BOOK_INTERVAL:30} #Get feed recent books fetching interval
   items-per-page: ${ITEMS_PER_PAGE:10}
   book-return-days: ${BOOK_RETURN_DAYS:10} #Time period to return the book
   book-taken-limit: ${BOOK_TAKEN_LIMIT:2} #Number of books a user can take 
@@ -55,8 +34,8 @@ app:
   cover-thumb-image-path: ${COVER_THUMB_IMAGE_PATH:D:/MyApps/coverImages/coverThumb/}
   qr-code-image-path: ${QR_CODE_IMAGE_PATH:D:/MyApps/QrCode/}
   qr-code-pdf-path: ${QR_CODE_PDF_PATH:D:/MyApps/QrCode/QrCodes.pdf}
-  privacy-policy-path: /home/app/library-app/privacy_policy_bibliothek.html
-  api-host: ${API_HOST} #For swagger API
-  firebase-server-key: ${FIREBASE_SERVER_KEY}
+  privacy-policy-path: /home/thinkpalm/library-app/privacy_policy_toshokan.html
+  api-host: ${API_HOST:192.168.1.150:8081} #For swagger API
+  firebase-server-key: AAAAwmgqLkk:APA91bGcQLbN8uOWcdjGHbM6RcpGQReKc17l6GzXofvZOqgILTJXoWloBBp1TIqjTC8wOJdq2093jImp_BJJdzUN6ZavHYajsJUNxuvWZIebk1ass9FcoDTWStAo_zZBl9aa2KObe3Od
   firebase-api-url: https://fcm.googleapis.com/fcm/send
   

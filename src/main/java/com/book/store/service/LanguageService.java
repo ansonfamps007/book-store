@@ -5,8 +5,8 @@ import java.util.List;
 import java.util.Optional;
 
 import com.book.store.bean.LanguageForm;
+import com.book.store.dto.LanguageResponse;
 import com.book.store.model.Language;
-import com.book.store.response.LanguageResponse;
 
 public interface LanguageService {
 

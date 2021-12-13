@@ -1,5 +1,5 @@
 
-package com.book.store.response;
+package com.book.store.dto;
 
 import lombok.Builder;
 import lombok.Getter;
@@ -10,7 +10,7 @@ import lombok.ToString;
 @Getter
 @ToString
 @Builder
-public class AuthorResponse {
+public class AuthorDto {
 
 	private int id;
 

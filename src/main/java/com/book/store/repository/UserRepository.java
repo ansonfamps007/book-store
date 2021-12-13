@@ -9,8 +9,8 @@ import org.springframework.data.jpa.repository.Query;
 import org.springframework.data.repository.CrudRepository;
 import org.springframework.data.repository.query.Param;
 
+import com.book.store.dto.NotReturnedUsers;
 import com.book.store.model.User;
-import com.book.store.response.NotReturnedUsers;
 
 /**
  * 

@@ -1,7 +1,6 @@
 
 package com.book.store.bean;
 
-import javax.validation.constraints.NotBlank;
 
 import org.springframework.web.multipart.MultipartFile;
 
@@ -26,7 +25,6 @@ public class BookForm {
 
 	private String coverThumbUrl;
 
-	@NotBlank(message = "title should not be blank")
 	@JsonProperty("title")
 	private String title;
 

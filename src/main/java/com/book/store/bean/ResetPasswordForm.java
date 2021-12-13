@@ -1,9 +1,6 @@
 
 package com.book.store.bean;
 
-import javax.validation.constraints.Email;
-import javax.validation.constraints.NotBlank;
-
 import com.fasterxml.jackson.annotation.JsonAlias;
 
 import lombok.Getter;
@@ -12,15 +9,11 @@ import lombok.Setter;
 @Getter
 @Setter
 public class ResetPasswordForm {
- 
-    @NotBlank
-    @Email
-    @JsonAlias("email")
-    private String username; 
-    
-    @NotBlank
-    private String password;
-    
-    @NotBlank
-    private String resetToken;
+
+	@JsonAlias("email")
+	private String username;
+
+	private String password;
+
+	private String resetToken;
 }
