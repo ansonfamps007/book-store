@@ -10,7 +10,7 @@ import lombok.ToString;
 @Getter
 @ToString
 @Builder
-public class LanguageResponse {
+public class CategoryDto {
 
 	private int id;
 

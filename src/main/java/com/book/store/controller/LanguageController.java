@@ -3,11 +3,14 @@ package com.book.store.controller;
 
 import java.util.List;
 
+import javax.validation.Valid;
+
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.MediaType;
-import org.springframework.util.ObjectUtils;
+import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.DeleteMapping;
 import org.springframework.web.bind.annotation.GetMapping;
+import org.springframework.web.bind.annotation.PatchMapping;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestBody;
@@ -15,13 +18,12 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 
 import com.book.store.bean.LanguageForm;
-import com.book.store.dto.ApiResponse;
-import com.book.store.dto.Data;
-import com.book.store.dto.LanguageResponse;
-import com.book.store.exception.ValidationException;
+import com.book.store.dto.LanguageDto;
 import com.book.store.service.LanguageService;
-import com.book.store.util.ApiConstants;
 
+import io.swagger.v3.oas.annotations.Operation;
+import io.swagger.v3.oas.annotations.responses.ApiResponse;
+import io.swagger.v3.oas.annotations.responses.ApiResponses;
 import lombok.extern.slf4j.Slf4j;
 
 @RestController
@@ -38,77 +40,57 @@ public class LanguageController {
 	 * @param languageForm
 	 * @return
 	 */
-	@PostMapping(value = "/add_language", produces = { MediaType.APPLICATION_JSON_VALUE }, consumes = {
+	@PostMapping(value = "/add", produces = { MediaType.APPLICATION_JSON_VALUE }, consumes = {
 			MediaType.APPLICATION_JSON_VALUE })
-	public ApiResponse addLanguage(@RequestBody LanguageForm languageForm) {
-
-		log.debug("LanguageController : add_language {} ");
-		if (!languageService.existsByName(languageForm.getName())) {
-			languageService.addLanguage(languageForm.getName());
-			return ApiResponse.builder().error(false).message("Language added successfully.").build();
-		} else {
-			throw new ValidationException("Language name already exist !");
-		}
+	@Operation(summary = "Inserting Language")
+	@ApiResponses(value = { @ApiResponse(responseCode = "200", description = "Success"),
+			@ApiResponse(responseCode = "400", description = "Invalid Data"),
+			@ApiResponse(responseCode = "406", description = "Validation exception") })
+	public ResponseEntity<String> addLanguage(@Valid @RequestBody LanguageForm languageForm) {
+		log.debug("LanguageController : addLanguage {} ");
+		languageService.addLanguage(languageForm.getName());
+		return ResponseEntity.ok("Successfully Inserted !");
 	}
 
-	/**
-	 * 
-	 * @param languageForm
-	 * @return
-	 */
-	@PostMapping(value = "/update_language", produces = { MediaType.APPLICATION_JSON_VALUE }, consumes = {
+	@GetMapping(value = "/getAll", produces = { MediaType.APPLICATION_JSON_VALUE })
+	@Operation(summary = "Fetch All Languages")
+	@ApiResponses(value = { @ApiResponse(responseCode = "200", description = "Success"),
+			@ApiResponse(responseCode = "400", description = "Invalid Data"), })
+	public ResponseEntity<List<LanguageDto>> getAllLanguages() {
+		log.info("LanguageController - getAllLanguages {} ");
+		return ResponseEntity.ok(languageService.getAllLanguages());
+	}
+
+	@GetMapping(value = "/get/{name}", produces = { MediaType.APPLICATION_JSON_VALUE })
+	@Operation(summary = "Fetch Language By Name")
+	@ApiResponses(value = { @ApiResponse(responseCode = "200", description = "Success"),
+			@ApiResponse(responseCode = "400", description = "Invalid Data"), })
+	public ResponseEntity<LanguageDto> getLanguageByName(@PathVariable String name) {
+		log.info("LanguageController - getLanguageByName {} ", name);
+		return ResponseEntity.ok(languageService.getLanguageByName(name));
+	}
+
+	@PatchMapping(value = "/update", produces = { MediaType.APPLICATION_JSON_VALUE }, consumes = {
 			MediaType.APPLICATION_JSON_VALUE })
-	public ApiResponse updateLanguage(@RequestBody LanguageForm languageForm) {
-
-		if (languageService.existsByLanguageId(languageForm.getId())) {
-			languageService.updateLanguage(languageForm);
-			return ApiResponse.builder().error(false).message("Language updated successfully.").build();
-		} else {
-			throw new ValidationException(ApiConstants.NO_DATA);
-		}
+	@Operation(summary = "Updating Language")
+	@ApiResponses(value = { @ApiResponse(responseCode = "200", description = "Success"),
+			@ApiResponse(responseCode = "400", description = "Invalid Data"),
+			@ApiResponse(responseCode = "406", description = "Validation exception") })
+	public ResponseEntity<String> updateLanguage(@Valid @RequestBody LanguageForm languageForm) {
+		log.debug("LanguageController : updateLanguage {} ");
+		languageService.updateLanguage(languageForm);
+		return ResponseEntity.ok("Successfully Updated !");
 	}
 
-	/**
-	 * 
-	 * 
-	 * @param languageForm
-	 * @return
-	 */
-	@DeleteMapping(value = "/delete_language/{id}", produces = { MediaType.APPLICATION_JSON_VALUE })
-	public ApiResponse deleteLanguage(@PathVariable int id) {
-
-		if (languageService.existsByLanguageId(id)) {
-			languageService.deleteLanguage(id);
-			return ApiResponse.builder().error(false).message("Language deleted successfully.").build();
-		} else {
-			throw new ValidationException(ApiConstants.NO_DATA);
-		}
-	}
-
-	/**
-	 * 
-	 * @return
-	 */
-	@GetMapping(value = "/get_languages", produces = { MediaType.APPLICATION_JSON_VALUE })
-	public ApiResponse getLanguages() {
-		List<LanguageResponse> languages = languageService.getAllLangauges();
-		if (!ObjectUtils.isEmpty(languages)) {
-			Data languageData = new Data();
-			languageData.setLanguages(languages);
-			return ApiResponse.builder().error(false).message("OK").data(languageData).build();
-		} else {
-			throw new ValidationException(ApiConstants.NO_DATA);
-		}
-	}
-
-	@GetMapping(value = "/get_languages/{name}", produces = { MediaType.APPLICATION_JSON_VALUE })
-	public ApiResponse getLanguageByName(@PathVariable String name) {
-		log.info("CategoryController - getCategoryByName {} ", name);
-		Data languageData = new Data();
-		return languageService.fetchLanguageByName(name).map(language -> {
-			languageData.setLanguages(language);
-			return ApiResponse.builder().error(false).data(languageData).message("OK").build();
-		}).orElseThrow(() -> new ValidationException(ApiConstants.NO_DATA));
+	@DeleteMapping(value = "/delete/{id}", produces = { MediaType.APPLICATION_JSON_VALUE })
+	@Operation(summary = "Deleting Language")
+	@ApiResponses(value = { @ApiResponse(responseCode = "200", description = "Success"),
+			@ApiResponse(responseCode = "400", description = "Invalid Data"),
+			@ApiResponse(responseCode = "406", description = "Validation exception") })
+	public ResponseEntity<String> deleteLanguage(@PathVariable int id) {
+		log.debug("LanguageController : deleteLanguage {} ");
+		languageService.deleteLanguage(id);
+		return ResponseEntity.ok("Successfully Deleted !");
 	}
 
 }

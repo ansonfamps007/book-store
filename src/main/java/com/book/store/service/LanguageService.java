@@ -2,26 +2,20 @@
 package com.book.store.service;
 
 import java.util.List;
-import java.util.Optional;
 
 import com.book.store.bean.LanguageForm;
-import com.book.store.dto.LanguageResponse;
-import com.book.store.model.Language;
+import com.book.store.dto.LanguageDto;
 
 public interface LanguageService {
 
-	void addLanguage(String languageName);
+	void addLanguage(String name);
 
 	void updateLanguage(LanguageForm languageForm);
 
-	boolean existsByName(String name);
-
-	boolean existsByLanguageId(int id);
+	LanguageDto getLanguageByName(String name);
 
 	void deleteLanguage(int id);
 
-	List<LanguageResponse> getAllLangauges();
-	
-	Optional<Language> fetchLanguageByName(String name);
+	List<LanguageDto> getAllLanguages();
 
 }

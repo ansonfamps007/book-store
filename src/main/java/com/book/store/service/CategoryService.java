@@ -2,26 +2,20 @@
 package com.book.store.service;
 
 import java.util.List;
-import java.util.Optional;
 
 import com.book.store.bean.CategoryForm;
-import com.book.store.dto.CategoryResponse;
-import com.book.store.model.Category;
+import com.book.store.dto.CategoryDto;
 
 public interface CategoryService {
 
-	boolean existsByName(String name);
-
 	void addCategory(String name);
 
-	boolean existsByCategoryId(int id);
+	void updateCategory(CategoryForm authorForm);
 
-	void updateCategory(CategoryForm categoryForm);
+	CategoryDto getCategoryByName(String name);
 
 	void deleteCategory(int id);
 
-	List<CategoryResponse> getAllCategories();
-
-	Optional<Category> fetchCategoryByName(String name);
+	List<CategoryDto> getAllCategories();
 
 }
