@@ -21,7 +21,7 @@ import com.book.store.util.ApiConstants;
 public class CategoryServiceImpl implements CategoryService {
 
 	@Autowired
-	CategoryRepository categoryRepository;
+	private CategoryRepository categoryRepository;
 
 	@Override
 	@Transactional(rollbackFor = Exception.class)

@@ -1,5 +1,4 @@
 
-
 package com.book.store.dto;
 
 import com.fasterxml.jackson.annotation.JsonInclude;
@@ -14,15 +13,13 @@ import lombok.ToString;
 @Setter
 @Builder
 @ToString
-public class ApiResponse {
+public class ApiErrorResponse {
 
 	private boolean error;
-	
+
 	@JsonInclude(Include.NON_NULL)
 	private int errorCode;
 
 	private String message;
 
-	@JsonInclude(Include.NON_NULL)
-	private Data data;
 }

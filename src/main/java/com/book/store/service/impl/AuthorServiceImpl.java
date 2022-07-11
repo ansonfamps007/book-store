@@ -20,8 +20,13 @@ import com.book.store.util.ApiConstants;
 @Service
 public class AuthorServiceImpl implements AuthorService {
 
+	private final AuthorRepository authorRepository;
+
 	@Autowired
-	private AuthorRepository authorRepository;
+	public AuthorServiceImpl(AuthorRepository authorRepository) {
+		this.authorRepository = authorRepository;
+
+	}
 
 	@Override
 	@Transactional(rollbackFor = Exception.class)
@@ -78,5 +83,11 @@ public class AuthorServiceImpl implements AuthorService {
 		return authorRepository.findByName(name)
 				.map(author -> AuthorDto.builder().id(author.getId()).name(author.getName()).build())
 				.orElseThrow(() -> new ValidationException(ApiConstants.NO_DATA));
+	}
+
+	@Override
+	public List<String> getBooks(String name) {
+		return authorRepository.findByName(name).get().getBooks().stream().map(s -> s.getTitle())
+				.collect(Collectors.toList());
 	}
 }

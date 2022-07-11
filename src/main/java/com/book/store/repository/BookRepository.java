@@ -2,7 +2,7 @@
 package com.book.store.repository;
 
 import java.util.List;
-import java.util.Set;
+import java.util.Optional;
 
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
@@ -20,6 +20,12 @@ import com.book.store.model.BookReturnResponse;
  * 
  */
 public interface BookRepository extends CrudRepository<Book, Integer> {
+
+	boolean existsByTitle(String name);
+	
+	List<Book> findAll();
+	
+	Optional<Book> findByTitleContains(String Title);
 
 	@Query(value = "select book.id, book.status, book.cover_url, book.cover_thumb_url, book.title, book.author_id, book.language_id, book.category_id, "
 			+ "book.donated_id, book.created_at, "

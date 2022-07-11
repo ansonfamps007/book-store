@@ -2,6 +2,8 @@
 package com.book.store.controller;
 
 import java.util.List;
+import java.util.Optional;
+import java.util.Set;
 
 import javax.validation.Valid;
 
@@ -19,6 +21,8 @@ import org.springframework.web.bind.annotation.RestController;
 
 import com.book.store.bean.AuthorForm;
 import com.book.store.dto.AuthorDto;
+import com.book.store.model.Author;
+import com.book.store.model.Book;
 import com.book.store.service.AuthorService;
 
 import io.swagger.v3.oas.annotations.Operation;
@@ -31,8 +35,12 @@ import lombok.extern.slf4j.Slf4j;
 @Slf4j
 public class AuthorController {
 
+	private final AuthorService authorService;
+
 	@Autowired
-	private AuthorService authorService;
+	public AuthorController(AuthorService authorService) {
+		this.authorService = authorService;
+	}
 
 	@PostMapping(value = "/add", produces = { MediaType.APPLICATION_JSON_VALUE }, consumes = {
 			MediaType.APPLICATION_JSON_VALUE })
@@ -85,6 +93,16 @@ public class AuthorController {
 		log.debug("AuthorController : deleteAuthor {} ");
 		authorService.deleteAuthor(id);
 		return ResponseEntity.ok("Successfully Deleted !");
+	}
+
+	// Testing to be removed
+	@GetMapping(value = "/getBooks/{name}", produces = { MediaType.APPLICATION_JSON_VALUE })
+	@Operation(summary = "Fetch All books of Author By Name")
+	@ApiResponses(value = { @ApiResponse(responseCode = "200", description = "Success"),
+			@ApiResponse(responseCode = "400", description = "Invalid Data"), })
+	public ResponseEntity<List<String>> getBooks(@PathVariable String name) {
+		log.info("AuthorController - getAuthorByName {} ", name);
+		return ResponseEntity.ok(authorService.getBooks(name));
 	}
 
 }

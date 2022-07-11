@@ -9,7 +9,7 @@ import org.springframework.web.bind.annotation.ExceptionHandler;
 import org.springframework.web.bind.annotation.ResponseStatus;
 import org.springframework.web.bind.annotation.RestControllerAdvice;
 
-import com.book.store.dto.ApiResponse;
+import com.book.store.dto.ApiErrorResponse;
 
 /**
  * 
@@ -27,8 +27,8 @@ public class RestExceptionHandler {
 	 */
 	@ExceptionHandler(value = { ValidationException.class })
 	@ResponseStatus(HttpStatus.BAD_REQUEST)
-	public ApiResponse badRequestExceptionHandler(final ValidationException ex) {
-		return ApiResponse.builder().error(true).errorCode(HttpStatus.BAD_REQUEST.value()).message(ex.getMessage())
+	public ApiErrorResponse badRequestExceptionHandler(final ValidationException ex) {
+		return ApiErrorResponse.builder().error(true).errorCode(HttpStatus.BAD_REQUEST.value()).message(ex.getMessage())
 				.build();
 	}
 
@@ -41,8 +41,8 @@ public class RestExceptionHandler {
 	 */
 	@ExceptionHandler(value = { IllegalArgumentException.class })
 	@ResponseStatus(HttpStatus.NOT_ACCEPTABLE)
-	public ApiResponse badRequestExceptionHandler(final IllegalArgumentException ex) {
-		return ApiResponse.builder().error(true).errorCode(HttpStatus.NOT_ACCEPTABLE.value()).message(ex.getMessage())
+	public ApiErrorResponse badRequestExceptionHandler(final IllegalArgumentException ex) {
+		return ApiErrorResponse.builder().error(true).errorCode(HttpStatus.NOT_ACCEPTABLE.value()).message(ex.getMessage())
 				.build();
 	}
 
@@ -55,10 +55,10 @@ public class RestExceptionHandler {
 	 */
 	@ExceptionHandler(value = { MethodArgumentNotValidException.class })
 	@ResponseStatus(HttpStatus.NOT_ACCEPTABLE)
-	public ApiResponse methodArgumentNotValidExceptionHandler(final MethodArgumentNotValidException ex) {
+	public ApiErrorResponse methodArgumentNotValidExceptionHandler(final MethodArgumentNotValidException ex) {
 		final String errorMsg = ex.getBindingResult().getFieldError().getField() + " - "
 				+ ex.getBindingResult().getFieldError().getDefaultMessage();
-		return ApiResponse.builder().error(true).errorCode(HttpStatus.NOT_ACCEPTABLE.value()).message(errorMsg).build();
+		return ApiErrorResponse.builder().error(true).errorCode(HttpStatus.NOT_ACCEPTABLE.value()).message(errorMsg).build();
 	}
 
 	/**
@@ -70,15 +70,15 @@ public class RestExceptionHandler {
 
 	@ExceptionHandler(value = { Exception.class })
 	@ResponseStatus(HttpStatus.INTERNAL_SERVER_ERROR)
-	public ApiResponse internalServerExceptionHandler(final Exception ex) {
-		return ApiResponse.builder().error(true).errorCode(HttpStatus.INTERNAL_SERVER_ERROR.value())
+	public ApiErrorResponse internalServerExceptionHandler(final Exception ex) {
+		return ApiErrorResponse.builder().error(true).errorCode(HttpStatus.INTERNAL_SERVER_ERROR.value())
 				.message(ex.getMessage()).build();
 	}
 
 	@ExceptionHandler(value = { ServiceUnavailableException.class })
 	@ResponseStatus(HttpStatus.INTERNAL_SERVER_ERROR)
-	public ApiResponse internalServerExceptionHandler(final ServiceUnavailableException ex) {
-		return ApiResponse.builder().error(true).errorCode(HttpStatus.INTERNAL_SERVER_ERROR.value())
+	public ApiErrorResponse internalServerExceptionHandler(final ServiceUnavailableException ex) {
+		return ApiErrorResponse.builder().error(true).errorCode(HttpStatus.INTERNAL_SERVER_ERROR.value())
 				.message(ex.getMessage()).build();
 	}
 }

@@ -1,10 +1,14 @@
 
 package com.book.store.model;
 
+import java.util.Set;
+
 import javax.persistence.Entity;
+import javax.persistence.FetchType;
 import javax.persistence.GeneratedValue;
 import javax.persistence.GenerationType;
 import javax.persistence.Id;
+import javax.persistence.OneToMany;
 import javax.persistence.Table;
 
 import lombok.Getter;
@@ -23,5 +27,8 @@ public class Author {
 	private int id;
 
 	private String name;
+	
+	@OneToMany(fetch = FetchType.LAZY,mappedBy = "author")
+	private Set<Book> books;
 
 }
