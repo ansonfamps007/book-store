@@ -11,6 +11,11 @@ spring:
     password: ${MYSQL_PWD:root}
   jpa: 
     show-sql: true
+  kafka:    consumer:      bootstrap-servers:      - localhost:29092,localhost:39092
+      group-id: book-store
+      key-deserializer: org.apache.kafka.common.serialization.StringDeserializer
+      value-deserializer: org.apache.kafka.common.serialization.StringDeserializer
+  
 jwt:
   secret: xq0m8NGSQDTibX7uSvRgbK9b1Vd0a1q5
   expiry: ${JWT_KEY_TTL:365} #Expiry calculate in days 
