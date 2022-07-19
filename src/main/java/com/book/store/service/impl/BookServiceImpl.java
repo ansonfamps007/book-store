@@ -23,17 +23,23 @@ import com.book.store.service.BookService;
 @Service
 public class BookServiceImpl implements BookService {
 
-	@Autowired
-	private BookRepository bookRepository;
+	private final BookRepository bookRepository;
+
+	private final AuthorRepository authorRepository;
+
+	private final CategoryRepository categoryRepository;
+
+	private final LanguageRepository languageRepository;
 
 	@Autowired
-	private AuthorRepository authorRepository;
+	public BookServiceImpl(BookRepository bookRepository, AuthorRepository authorRepository,
+			CategoryRepository categoryRepository, LanguageRepository languageRepository) {
+		this.bookRepository = bookRepository;
+		this.authorRepository = authorRepository;
+		this.categoryRepository = categoryRepository;
+		this.languageRepository = languageRepository;
 
-	@Autowired
-	private CategoryRepository categoryRepository;
-
-	@Autowired
-	private LanguageRepository languageRepository;
+	}
 
 	@Override
 	@Transactional(rollbackFor = Exception.class)
@@ -59,9 +65,7 @@ public class BookServiceImpl implements BookService {
 	public List<BookDto> getAllBooks() {
 		List<Book> bookList = bookRepository.findAll();
 		if (!ObjectUtils.isEmpty(bookList)) {
-			return bookList.stream()
-					.map(mapBookResponse())
-					.collect(Collectors.toList());
+			return bookList.stream().map(mapBookResponse()).collect(Collectors.toList());
 		} else {
 			throw new ValidationException("No Books found!");
 		}
@@ -69,16 +73,14 @@ public class BookServiceImpl implements BookService {
 
 	@Override
 	public BookDto getBookByName(String name) {
-		return bookRepository.findByTitleContains(name)
-				.map(mapBookResponse())
+		return bookRepository.findByTitleContains(name).map(mapBookResponse())
 				.orElseThrow(() -> new ValidationException("No Book found!"));
 	}
 
 	private Function<? super Book, ? extends BookDto> mapBookResponse() {
-		return book -> BookDto.builder().id(book.getId()).title(book.getTitle())
-				.description(book.getDescription()).author(book.getAuthor().getName())
-				.category(book.getCategory().getName()).language(book.getLanguage().getName())
-				.createdAt(book.getCreatedAt()).build();
+		return book -> BookDto.builder().id(book.getId()).title(book.getTitle()).description(book.getDescription())
+				.author(book.getAuthor().getName()).category(book.getCategory().getName())
+				.language(book.getLanguage().getName()).createdAt(book.getCreatedAt()).build();
 	}
 
 	/*
