@@ -8,7 +8,9 @@ import javax.validation.Valid;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.MediaType;
 import org.springframework.http.ResponseEntity;
+import org.springframework.web.bind.annotation.DeleteMapping;
 import org.springframework.web.bind.annotation.GetMapping;
+import org.springframework.web.bind.annotation.PatchMapping;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestBody;
@@ -49,6 +51,18 @@ public class BookController {
 		return ResponseEntity.ok("Successfully Inserted !");
 	}
 
+	@PatchMapping(value = "/update", produces = { MediaType.APPLICATION_JSON_VALUE }, consumes = {
+			MediaType.APPLICATION_JSON_VALUE })
+	@Operation(summary = "Updating Book")
+	@ApiResponses(value = { @ApiResponse(responseCode = "200", description = "Success"),
+			@ApiResponse(responseCode = "400", description = "Invalid Data"),
+			@ApiResponse(responseCode = "406", description = "Validation exception") })
+	public ResponseEntity<String> updateBook(@Valid @RequestBody BookForm bookForm) {
+		log.debug("BookController : updateBook {} ");
+		bookService.updateBook(bookForm);
+		return ResponseEntity.ok("Successfully Updated !");
+	}
+
 	@GetMapping(value = "/getAll", produces = { MediaType.APPLICATION_JSON_VALUE })
 	@Operation(summary = "Fetch All Books")
 	@ApiResponses(value = { @ApiResponse(responseCode = "200", description = "Success"),
@@ -68,39 +82,15 @@ public class BookController {
 		return ResponseEntity.ok(bookService.getBookByName(name));
 	}
 
-	/*
-	 * 
-	 * @PatchMapping(value = "/update", produces = {
-	 * MediaType.APPLICATION_JSON_VALUE }, consumes = {
-	 * MediaType.APPLICATION_JSON_VALUE })
-	 * 
-	 * @Operation(summary = "Updating Book")
-	 * 
-	 * @ApiResponses(value = { @ApiResponse(responseCode = "200", description =
-	 * "Success"),
-	 * 
-	 * @ApiResponse(responseCode = "400", description = "Invalid Data"),
-	 * 
-	 * @ApiResponse(responseCode = "406", description = "Validation exception") })
-	 * public ResponseEntity<String> updateBook(@Valid @RequestBody BookForm
-	 * bookForm) { log.debug("BookController : updateBook {} ");
-	 * bookService.updateBook(bookForm); return
-	 * ResponseEntity.ok("Successfully Updated !"); }
-	 * 
-	 * @DeleteMapping(value = "/delete/{id}", produces = {
-	 * MediaType.APPLICATION_JSON_VALUE })
-	 * 
-	 * @Operation(summary = "Deleting Book")
-	 * 
-	 * @ApiResponses(value = { @ApiResponse(responseCode = "200", description =
-	 * "Success"),
-	 * 
-	 * @ApiResponse(responseCode = "400", description = "Invalid Data"),
-	 * 
-	 * @ApiResponse(responseCode = "406", description = "Validation exception") })
-	 * public ResponseEntity<String> deleteBook(@PathVariable int id) {
-	 * log.debug("BookController : deleteBook {} "); bookService.deleteBook(id);
-	 * return ResponseEntity.ok("Successfully Deleted !"); }
-	 */
+	@DeleteMapping(value = "/delete/{id}", produces = { MediaType.APPLICATION_JSON_VALUE })
+	@Operation(summary = "Deleting Book")
+	@ApiResponses(value = { @ApiResponse(responseCode = "200", description = "Success"),
+			@ApiResponse(responseCode = "400", description = "Invalid Data"),
+			@ApiResponse(responseCode = "406", description = "Validation exception") })
+	public ResponseEntity<String> deleteBook(@PathVariable int id) {
+		log.debug("BookController : deleteBook {} ");
+		bookService.deleteBook(id);
+		return ResponseEntity.ok("Successfully Deleted !");
+	}
 
 }

@@ -21,7 +21,7 @@ import com.book.store.model.BookReturnResponse;
  */
 public interface BookRepository extends CrudRepository<Book, Integer> {
 
-	boolean existsByTitle(String name);
+	boolean existsByTitleIgnoreCase(String title);
 	
 	Optional<List<Book>> findByTitleContains(String Title);
 

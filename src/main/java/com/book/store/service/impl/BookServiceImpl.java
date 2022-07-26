@@ -47,7 +47,7 @@ public class BookServiceImpl implements BookService {
 	@Override
 	@Transactional(rollbackFor = Exception.class)
 	public void addBook(BookForm bookForm) {
-		if (!bookRepository.existsByTitle(bookForm.getTitle())) {
+		if (!bookRepository.existsByTitleIgnoreCase(bookForm.getTitle())) {
 			Book book = Book.builder().title(bookForm.getTitle()).description(bookForm.getDescription())
 					.author(authorRepository.findByName(bookForm.getAuthor()).orElseThrow(
 							() -> new ValidationException("No Author found with given name: " + bookForm.getAuthor())))
@@ -62,6 +62,13 @@ public class BookServiceImpl implements BookService {
 		} else {
 			throw new ValidationException("Book name already exist !");
 		}
+	}
+
+	@Override
+	@Transactional(rollbackFor = Exception.class)
+	public void updateBook(BookForm bookForm) {
+		// TODO Auto-generated method stub
+
 	}
 
 	@Override
@@ -88,16 +95,6 @@ public class BookServiceImpl implements BookService {
 	}
 
 	/*
-	 * private Function<? super List<Book>, ? extends List<BookDto>>
-	 * mapBookResponseList() { return book ->
-	 * BookDto.builder().id(book.getId()).title(book.getTitle()).description(book.
-	 * getDescription())
-	 * .author(book.getAuthor().getName()).category(book.getCategory().getName())
-	 * .language(book.getLanguage().getName()) .createdAt(book.getCreatedAt())
-	 * .build(); }
-	 */
-
-	/*
 	 * @Override public void updateBook(BookForm bookForm) {
 	 * 
 	 * int bookId = bookForm.getId(); if (bookRepository.existsById(bookId)) { Book
@@ -113,10 +110,5 @@ public class BookServiceImpl implements BookService {
 	 * ValidationException("No Book found with given book ID: " + bookId); } }
 	 * 
 	 * 
-	 * 
-	 * @Override public BookDto getBookByName(String name) { return
-	 * bookRepository.findByName(name) .map(book ->
-	 * BookDto.builder().id(book.getId()).name(book.getName()).build())
-	 * .orElseThrow(() -> new ValidationException(ApiConstants.NO_DATA)); }
 	 */
 }
