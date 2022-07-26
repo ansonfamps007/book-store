@@ -10,9 +10,9 @@ public interface BookService {
 
 	void addBook(BookForm bookForm);
 	
-	List<BookDto> getAllBooks();
+	List<BookDto> getAllBooks(int pageNo, int pageLimit);
 
-	BookDto getBookByName(String name);
+	List<BookDto> getBookByName(String name);
 
 	/*
 	 * void updateBook(BookForm bookForm);

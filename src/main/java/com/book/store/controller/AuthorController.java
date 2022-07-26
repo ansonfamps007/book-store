@@ -2,8 +2,6 @@
 package com.book.store.controller;
 
 import java.util.List;
-import java.util.Optional;
-import java.util.Set;
 
 import javax.validation.Valid;
 
@@ -21,8 +19,6 @@ import org.springframework.web.bind.annotation.RestController;
 
 import com.book.store.bean.AuthorForm;
 import com.book.store.dto.AuthorDto;
-import com.book.store.model.Author;
-import com.book.store.model.Book;
 import com.book.store.service.AuthorService;
 
 import io.swagger.v3.oas.annotations.Operation;
@@ -95,7 +91,7 @@ public class AuthorController {
 		return ResponseEntity.ok("Successfully Deleted !");
 	}
 
-	// Testing to be removed
+	// Get all book belongs to author
 	@GetMapping(value = "/getBooks/{name}", produces = { MediaType.APPLICATION_JSON_VALUE })
 	@Operation(summary = "Fetch All books of Author By Name")
 	@ApiResponses(value = { @ApiResponse(responseCode = "200", description = "Success"),

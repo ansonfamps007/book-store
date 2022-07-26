@@ -6,6 +6,9 @@ import java.util.function.Function;
 import java.util.stream.Collectors;
 
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.data.domain.PageRequest;
+import org.springframework.data.domain.Pageable;
+import org.springframework.data.domain.Sort;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 import org.springframework.util.ObjectUtils;
@@ -62,8 +65,9 @@ public class BookServiceImpl implements BookService {
 	}
 
 	@Override
-	public List<BookDto> getAllBooks() {
-		List<Book> bookList = bookRepository.findAll();
+	public List<BookDto> getAllBooks(int pageNo, int pageLimit) {
+		Pageable pageable = PageRequest.of(pageNo <= 0 ? 0 : pageNo - 1, pageLimit, Sort.by("title"));
+		List<Book> bookList = bookRepository.findAll(pageable);
 		if (!ObjectUtils.isEmpty(bookList)) {
 			return bookList.stream().map(mapBookResponse()).collect(Collectors.toList());
 		} else {
@@ -72,16 +76,26 @@ public class BookServiceImpl implements BookService {
 	}
 
 	@Override
-	public BookDto getBookByName(String name) {
-		return bookRepository.findByTitleContains(name).map(mapBookResponse())
-				.orElseThrow(() -> new ValidationException("No Book found!"));
+	public List<BookDto> getBookByName(String name) {
+		return bookRepository.findByTitleContains(name).orElseThrow(() -> new ValidationException("No Book found!"))
+				.stream().map(mapBookResponse()).collect(Collectors.toList());
 	}
 
 	private Function<? super Book, ? extends BookDto> mapBookResponse() {
 		return book -> BookDto.builder().id(book.getId()).title(book.getTitle()).description(book.getDescription())
 				.author(book.getAuthor().getName()).category(book.getCategory().getName())
-				.language(book.getLanguage().getName()).createdAt(book.getCreatedAt()).build();
+				.language(book.getLanguage().getName())/* .createdAt(book.getCreatedAt()) */.build();
 	}
+
+	/*
+	 * private Function<? super List<Book>, ? extends List<BookDto>>
+	 * mapBookResponseList() { return book ->
+	 * BookDto.builder().id(book.getId()).title(book.getTitle()).description(book.
+	 * getDescription())
+	 * .author(book.getAuthor().getName()).category(book.getCategory().getName())
+	 * .language(book.getLanguage().getName()) .createdAt(book.getCreatedAt())
+	 * .build(); }
+	 */
 
 	/*
 	 * @Override public void updateBook(BookForm bookForm) {

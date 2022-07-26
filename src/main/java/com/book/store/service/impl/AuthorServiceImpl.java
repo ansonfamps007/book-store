@@ -2,12 +2,12 @@
 package com.book.store.service.impl;
 
 import java.util.List;
+import java.util.Optional;
 import java.util.stream.Collectors;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
-import org.springframework.util.ObjectUtils;
 
 import com.book.store.bean.AuthorForm;
 import com.book.store.dto.AuthorDto;
@@ -68,14 +68,10 @@ public class AuthorServiceImpl implements AuthorService {
 
 	@Override
 	public List<AuthorDto> getAllAuthors() {
-		List<Author> authorList = authorRepository.findAll();
-		if (!ObjectUtils.isEmpty(authorList)) {
-			return authorList.stream()
-					.map(author -> AuthorDto.builder().id(author.getId()).name(author.getName()).build())
-					.collect(Collectors.toList());
-		} else {
-			throw new ValidationException("No Authors found!");
-		}
+		return Optional.ofNullable(authorRepository.findAll())
+				.orElseThrow(() -> new ValidationException("No Authors found!")).stream()
+				.map(author -> AuthorDto.builder().id(author.getId()).name(author.getName()).build())
+				.collect(Collectors.toList());
 	}
 
 	@Override
@@ -87,7 +83,7 @@ public class AuthorServiceImpl implements AuthorService {
 
 	@Override
 	public List<String> getBooks(String name) {
-		return authorRepository.findByName(name).get().getBooks().stream().map(s -> s.getTitle())
-				.collect(Collectors.toList());
+		return authorRepository.findByName(name).orElseThrow(() -> new ValidationException(ApiConstants.NO_BOOK))
+				.getBooks().stream().map(s -> s.getTitle()).collect(Collectors.toList());
 	}
 }

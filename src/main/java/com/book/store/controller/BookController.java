@@ -13,6 +13,7 @@ import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
+import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
 
 import com.book.store.bean.BookForm;
@@ -52,16 +53,17 @@ public class BookController {
 	@Operation(summary = "Fetch All Books")
 	@ApiResponses(value = { @ApiResponse(responseCode = "200", description = "Success"),
 			@ApiResponse(responseCode = "400", description = "Invalid Data"), })
-	public ResponseEntity<List<BookDto>> getAllBooks() {
+	public ResponseEntity<List<BookDto>> getAllBooks(@RequestParam("pageNo") int pageNo,
+			@RequestParam("pageLimit") int pageLimit) {
 		log.info("BookController - getAllBooks {} ");
-		return ResponseEntity.ok(bookService.getAllBooks());
+		return ResponseEntity.ok(bookService.getAllBooks(pageNo, pageLimit));
 	}
 
 	@GetMapping(value = "/get/{name}", produces = { MediaType.APPLICATION_JSON_VALUE })
 	@Operation(summary = "Fetch All Books")
 	@ApiResponses(value = { @ApiResponse(responseCode = "200", description = "Success"),
 			@ApiResponse(responseCode = "400", description = "Invalid Data"), })
-	public ResponseEntity<BookDto> getBookByName(@PathVariable String name) {
+	public ResponseEntity<List<BookDto>> getBookByName(@PathVariable String name) {
 		log.info("BookController - getAllBooks {} ");
 		return ResponseEntity.ok(bookService.getBookByName(name));
 	}

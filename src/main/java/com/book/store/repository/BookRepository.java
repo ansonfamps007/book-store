@@ -23,9 +23,7 @@ public interface BookRepository extends CrudRepository<Book, Integer> {
 
 	boolean existsByTitle(String name);
 	
-	List<Book> findAll();
-	
-	Optional<Book> findByTitleContains(String Title);
+	Optional<List<Book>> findByTitleContains(String Title);
 
 	@Query(value = "select book.id, book.status, book.cover_url, book.cover_thumb_url, book.title, book.author_id, book.language_id, book.category_id, "
 			+ "book.donated_id, book.created_at, "
@@ -109,5 +107,7 @@ public interface BookRepository extends CrudRepository<Book, Integer> {
 
 	@Query("select u from Book u where u.id = 209")
 	List<Book> findAllUserBooks();
+
+	List<Book> findAll(Pageable pageable);
 
 }
